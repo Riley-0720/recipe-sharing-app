@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { isSupabaseConfigured } from "@/lib/env";
 import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/Navbar";
@@ -7,6 +8,11 @@ import Navbar from "@/components/Navbar";
 export const dynamic = 'force-dynamic';
 
 async function getRecipes() {
+  // 如果 Supabase 未配置（构建时），返回空数组
+  if (!isSupabaseConfigured()) {
+    return [];
+  }
+
   const { data: recipes, error } = await supabase
     .from("recipes")
     .select(`
